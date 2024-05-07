@@ -1,10 +1,14 @@
 import express, { json } from "express";
+import dotenv from "dotenv";
 import { RunnerService } from "./runner.service.js";
+import { middleware } from "./middleware.js";
 
+dotenv.config();
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT;
 
 app.use(json());
+app.use(middleware);
 
 app.post("/automation", async (req, res) => {
   const files = req.body?.files ?? "";
