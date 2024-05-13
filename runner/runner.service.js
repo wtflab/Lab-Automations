@@ -1,7 +1,9 @@
-import { writeFile, unlink } from "node:fs/promises";
+import { writeFile, unlink, rm } from "node:fs/promises";
 import { Utils } from "./utils.js";
+import AdmZip from "adm-zip";
 
 export class RunnerService {
+  // добавить InPUT
   static async runTests(files) {
     const taskFilePath = "task.dart";
     const testFilePath = "test.dart";
@@ -46,70 +48,66 @@ export class RunnerService {
     await unlink(taskFilePath);
     await unlink(testFilePath);
 
+    console.log(testResults);
+
     return testResults;
   }
 
-  static async runFormatter(files) {
-    const taskFilePath = "task.dart";
+  static async runFormatter(archive) {
+    console.log("start");
+    const appPath = "app";
+    const zip = new AdmZip(Buffer.from(archive));
+    zip.extractAllTo(appPath, true);
 
     const command = `make format`;
     const formatterResults = [];
 
-    for (const file of files) {
-      let res = {
-        fileName: file.fileName,
-        success: true,
-      };
+    const { stdout } = await Utils.execAsync(command);
 
-      await writeFile(taskFilePath, file.taskFile, "utf-8");
+    console.log(stdout);
 
-      const { stdout } = await Utils.execAsync(command);
-      const changedLines = Utils.parseChangedCount(stdout);
-      if (changedLines > 0) {
-        res.success = false;
-        console.log(`File ${file.fileName} failed formatter`);
-      } else {
-        console.log(`File ${file.fileName} passed formatter successfully`);
-      }
+    // for (const file of files) {
+    //   let res = {
+    //     fileName: file.fileName,
+    //     success: true,
+    //   };
 
-      formatterResults.push(res);
-    }
+    //   await writeFile(taskFilePath, file.taskFile, "utf-8");
 
-    await unlink(taskFilePath);
+    //   const { stdout } = await Utils.execAsync(command);
+    //   const changedLines = Utils.parseChangedCount(stdout);
+    //   if (changedLines > 0) {
+    //     res.success = false;
+    //     console.log(`File ${file.fileName} failed formatter`);
+    //   } else {
+    //     console.log(`File ${file.fileName} passed formatter successfully`);
+    //   }
+
+    //   formatterResults.push(res);
+    // }
+
+    await rm(appPath, { recursive: true });
 
     return formatterResults;
   }
 
-  static async runLinter(files) {
-    const taskFilePath = "task.dart";
+  static async runLinter(archive) {
+    console.log("start");
+    const appPath = "app";
+    const zip = new AdmZip(Buffer.from(archive));
+    zip.extractAllTo(appPath, true);
 
     const command = `make lint`;
     const linterResults = [];
 
-    for (const file of files) {
-      let res = {
-        fileName: file.fileName,
-        success: true,
-        wrongLines: null,
-      };
-
-      await writeFile(taskFilePath, file.taskFile, "utf-8");
-
-      try {
-        await Utils.execAsync(command);
-        console.log(`File ${file.fileName} passed linter successfully`);
-      } catch ({ stdout }) {
-        const wrongLines = Utils.filterErrorLines(stdout.split("\n"));
-        res.success = false;
-        res.wrongLines = wrongLines;
-
-        console.log(`File ${file.fileName} failed linter: ${wrongLines}`);
-      } finally {
-        linterResults.push(res);
-      }
+    try {
+      const { stdout, stderr } = await Utils.execAsync(command);
+      console.log(stdout);
+    } catch (err) {
+      console.log(err);
     }
 
-    await unlink(taskFilePath);
+    await rm(appPath, { recursive: true });
 
     return linterResults;
   }
