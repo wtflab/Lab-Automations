@@ -4,7 +4,9 @@ import 'task.dart';
 
 void main() {
   group('Example tests', () {
-    test('Rotate a 3x3 matrix clockwise', () {
+    test(
+        'Rotate a 3x3 matrix clockwise @Input: "[[1, 2, 3], [4, 5, 6], [7, 8, 9]]"',
+        () {
       List<List<int>> matrix = [
         [1, 2, 3],
         [4, 5, 6],
@@ -20,7 +22,9 @@ void main() {
       ]);
     });
 
-    test('Rotate a 4x4 matrix clockwise', () {
+    test(
+        'Rotate a 4x4 matrix clockwise @Input: "[[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]"',
+        () {
       List<List<int>> matrix = [
         [5, 1, 9, 11],
         [2, 4, 8, 10],
@@ -40,7 +44,7 @@ void main() {
   });
 
   group('Main tests', () {
-    test('Rotate a 1x1 matrix clockwise', () {
+    test('Rotate a 1x1 matrix clockwise @Input: "[9]"', () {
       List<List<int>> matrix = [
         [9]
       ];
@@ -52,7 +56,7 @@ void main() {
       ]);
     });
 
-    test('Rotate a 2x2 matrix clockwise', () {
+    test('Rotate a 2x2 matrix clockwise @Input: "[1, 2], [3, 4]"', () {
       List<List<int>> matrix = [
         [1, 2],
         [3, 4]
@@ -66,7 +70,9 @@ void main() {
       ]);
     });
 
-    test('Rotate a 5x5 matrix clockwise', () {
+    test(
+        'Rotate a 5x5 matrix clockwise @Input: "[[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15], [16, 17, 18, 19, 20], [21, 22, 23, 24, 25]]"',
+        () {
       List<List<int>> matrix = [
         [1, 2, 3, 4, 5],
         [6, 7, 8, 9, 10],
@@ -86,7 +92,7 @@ void main() {
       ]);
     });
 
-    test('Rotate an empty matrix', () {
+    test('Rotate an empty matrix @Input: "[]"', () {
       List<List<int>> matrix = [];
 
       rotateImage(matrix);
@@ -94,7 +100,9 @@ void main() {
       expect(matrix, []);
     });
 
-    test('Rotate a 3x3 matrix with negative values', () {
+    test(
+        'Rotate a 3x3 matrix with negative values @Input: "[[-1, -2, -3], [-4, -5, -6], [-7, -8, -9]]"',
+        () {
       List<List<int>> matrix = [
         [-1, -2, -3],
         [-4, -5, -6],
@@ -110,7 +118,9 @@ void main() {
       ]);
     });
 
-    test('Rotate a 4x4 matrix with duplicate values', () {
+    test(
+        'Rotate a 4x4 matrix with duplicate values @Input: "[[1, 1, 2, 2], [3, 3, 4, 4], [5, 5, 6, 6], [7, 7, 8, 8]]"',
+        () {
       List<List<int>> matrix = [
         [1, 1, 2, 2],
         [3, 3, 4, 4],
@@ -128,7 +138,9 @@ void main() {
       ]);
     });
 
-    test('Rotate a 2x2 matrix with negative and positive values', () {
+    test(
+        'Rotate a 2x2 matrix with negative and positive values @Input: "[[-1, 2], [3, -4]]"',
+        () {
       List<List<int>> matrix = [
         [-1, 2],
         [3, -4]
@@ -142,7 +154,7 @@ void main() {
       ]);
     });
 
-    test('Rotate a 1x1 matrix with negative value', () {
+    test('Rotate a 1x1 matrix with negative value @Input: "[[-9]]"', () {
       List<List<int>> matrix = [
         [-9]
       ];
@@ -154,7 +166,9 @@ void main() {
       ]);
     });
 
-    test('Rotate a 5x5 matrix with all zeros', () {
+    test(
+        'Rotate a 5x5 matrix with all zeros @Input: "[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]"',
+        () {
       List<List<int>> matrix = [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -174,7 +188,9 @@ void main() {
       ]);
     });
 
-    test('Rotate a 4x4 matrix with alternating values', () {
+    test(
+        'Rotate a 4x4 matrix with alternating values @Input: "[[1, 2, 1, 2], [2, 1, 2, 1], [1, 2, 1, 2], [2, 1, 2, 1]]"',
+        () {
       List<List<int>> matrix = [
         [1, 2, 1, 2],
         [2, 1, 2, 1],

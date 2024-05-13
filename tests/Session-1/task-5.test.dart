@@ -141,7 +141,7 @@ void main() {
     });
 
     test(
-        'Find target element in a large array @Input: "[0,1,2,3,4...999998,999999], 10000"',
+        'Find target element in a large array @Input: "[0, 1, 2, 3, 4...999998, 999999], 10000"',
         () async {
       final input = List<int>.generate(1000000, (i) => i * 2);
       final result = await executeWithTimeout(
