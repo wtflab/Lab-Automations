@@ -7,78 +7,84 @@ import 'task.dart';
 
 void main() {
   group('Example tests', () {
-    test('Example test 1', () async {
+    test('Example test 1 @Input: "hello"', () async {
       final result = await executeWithTimeout(
-          reverseString, ['hello'], Duration(milliseconds: 1000));
+          reverseString, ['hello'], Duration(milliseconds: 500));
       expect(result, equals('olleh'));
     });
 
-    test('Example test 2', () async {
+    test('Example test 2 @Input: "Dart"', () async {
       final result = await executeWithTimeout(
-          reverseString, ['Dart'], Duration(milliseconds: 1000));
+          reverseString, ['Dart'], Duration(milliseconds: 500));
       expect(result, equals('traD'));
     });
   });
 
   group('Main tests', () {
-    test('Reversing a single character', () async {
+    test('Reversing a single character @Input: "a"', () async {
       final result = await executeWithTimeout(
-          reverseString, ['a'], Duration(milliseconds: 1000));
+          reverseString, ['a'], Duration(milliseconds: 500));
       expect(result, equals('a'));
     });
 
-    test('Reversing an empty string', () async {
+    test('Reversing an empty string @Input: ""', () async {
       final result = await executeWithTimeout(
-          reverseString, [''], Duration(milliseconds: 1000));
+          reverseString, [''], Duration(milliseconds: 500));
       expect(result, equals(''));
     });
 
-    test('Reversing a string of digits', () async {
+    test('Reversing a string of digits @Input: "123456789"', () async {
       final result = await executeWithTimeout(
-          reverseString, ['123456789'], Duration(milliseconds: 1000));
+          reverseString, ['123456789'], Duration(milliseconds: 500));
       expect(result, equals('987654321'));
     });
 
-    test('Reversing a string with numbers', () async {
+    test('Reversing a string with numbers @Input: "12345"', () async {
       final result = await executeWithTimeout(
-          reverseString, ['12345'], Duration(milliseconds: 1000));
+          reverseString, ['12345'], Duration(milliseconds: 500));
       expect(result, equals('54321'));
     });
 
-    test('Reversing a string with mixed uppercase and lowercase characters',
+    test(
+        'Reversing a string with mixed uppercase and lowercase characters @Input: "AbCdEfG"',
         () async {
       final result = await executeWithTimeout(
-          reverseString, ['AbCdEfG'], Duration(milliseconds: 1000));
+          reverseString, ['AbCdEfG'], Duration(milliseconds: 500));
       expect(result, equals('GfEdCbA'));
     });
 
-    test('Reversing a string with punctuation marks', () async {
+    test('Reversing a string with punctuation marks @Input: "Hello, World!"',
+        () async {
       final result = await executeWithTimeout(
-          reverseString, ['Hello, World!'], Duration(milliseconds: 1000));
+          reverseString, ['Hello, World!'], Duration(milliseconds: 500));
       expect(result, equals('!dlroW ,olleH'));
     });
 
-    test('Reversing a string with whitespace', () async {
+    test('Reversing a string with whitespace @Input: "Hello World"', () async {
       final result = await executeWithTimeout(
-          reverseString, ['Hello World'], Duration(milliseconds: 1000));
+          reverseString, ['Hello World'], Duration(milliseconds: 500));
       expect(result, equals('dlroW olleH'));
     });
 
-    test('Reversing a long string', () async {
+    test('Reversing a long string @Input: "Lorem ipsum dolor sit amet"',
+        () async {
       final result = await executeWithTimeout(reverseString,
-          ['Lorem ipsum dolor sit amet'], Duration(milliseconds: 1000));
+          ['Lorem ipsum dolor sit amet'], Duration(milliseconds: 500));
       expect(result, equals('tema tis rolod muspi meroL'));
     });
 
-    test('Reversing a string with special characters', () async {
+    test('Reversing a string with special characters @Input: "@!#HelloWorld"',
+        () async {
       final result = await executeWithTimeout(
-          reverseString, ['@!#HelloWorld'], Duration(milliseconds: 1000));
+          reverseString, ['@!#HelloWorld'], Duration(milliseconds: 500));
       expect(result, equals('dlroWolleH#!@'));
     });
 
-    test('Reversing a string with leading and trailing whitespaces', () async {
+    test(
+        'Reversing a string with leading and trailing whitespaces @Input: "   Hello, World!   "',
+        () async {
       final result = await executeWithTimeout(
-          reverseString, ['   Hello, World!   '], Duration(milliseconds: 1000));
+          reverseString, ['   Hello, World!   '], Duration(milliseconds: 500));
       expect(result, equals('   !dlroW ,olleH   '));
     });
   });
@@ -101,7 +107,7 @@ Future<dynamic> executeWithTimeout(
     return result;
   } catch (error) {
     timer.cancel();
-    return new TimeoutException('Function execution time more 1000 ms');
+    return new TimeoutException('Function execution time more 500 ms');
   }
 }
 
