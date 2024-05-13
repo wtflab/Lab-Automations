@@ -2,15 +2,16 @@ import { exec } from "child_process";
 
 export class Utils {
   static parseTestErrorMessage(stdout) {
-    const regex = /Expected:\s'(.*?)'|Actual:\s'(.*?)'|Actual:\s.+<(.*?)>/g;
+    const regex =
+      /Expected:\s'(.*?)'|Actual:\s'(.*?)'|Actual:\s.+<(.*?)>|@Input:\s"(.*?)".*?\[E/g;
     const matches = [];
     let match;
 
     while ((match = regex.exec(stdout)) !== null) {
-      matches.push(match[1] || match[2] || match[3] || "");
+      matches.push(match[1] || match[2] || match[3] || match[4] || "");
     }
 
-    return matches.slice(0, 2);
+    return matches.slice(0, 3);
   }
 
   static execAsync(command) {

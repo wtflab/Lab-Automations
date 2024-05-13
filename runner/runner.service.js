@@ -38,7 +38,7 @@ export class RunnerService {
         const errorMessage = Utils.parseTestErrorMessage(stdout);
         res.wrongTest = errorMessage;
         console.log(
-          `File ${file.fileName} didn't pass test. Expected: "${errorMessage[0]}" Actual: "${errorMessage[1]}"`
+          `File ${file.fileName} didn't pass test. Input: "${errorMessage[0]}" Expected: "${errorMessage[1]}" Actual: "${errorMessage[2]}"`
         );
       } finally {
         testResults.push(res);
