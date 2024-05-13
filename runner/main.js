@@ -11,12 +11,10 @@ app.use(json({ limit: "10mb" }));
 app.post("/automation/tasks/test", async (req, res) => {
   const files = req.body?.files ?? "";
 
-  const testResults = await RunnerService.runTests(files);
+  const failedTests = await RunnerService.runTests(files);
   res.status(200).json({
     message: "OK",
-    result: {
-      testResults,
-    },
+    result: failedTests,
   });
 });
 
@@ -26,9 +24,7 @@ app.post("/automation/formatter", async (req, res) => {
   const formatterResults = await RunnerService.runFormatter(archive);
   res.status(200).json({
     message: "OK",
-    result: {
-      formatterResults,
-    },
+    result: formatterResults,
   });
 });
 
@@ -38,9 +34,7 @@ app.post("/automation/linter", async (req, res) => {
   const linterResults = await RunnerService.runLinter(archive);
   res.status(200).json({
     message: "OK",
-    result: {
-      linterResults,
-    },
+    result: linterResults,
   });
 });
 

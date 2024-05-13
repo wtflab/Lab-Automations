@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 
 export class Utils {
-  static parseTestErrorMessage(stdout) {
+  static parseTestInfo(stdout) {
     const regex =
       /Expected:\s'(.*?)'|Actual:\s'(.*?)'|Actual:\s.+<(.*?)>|@Input:\s"(.*?)".*?\[E/g;
     const matches = [];

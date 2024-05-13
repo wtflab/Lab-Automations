@@ -3,22 +3,14 @@ import { Utils } from "./utils.js";
 import AdmZip from "adm-zip";
 
 export class RunnerService {
-  // добавить InPUT
   static async runTests(files) {
     const taskFilePath = "task.dart";
     const testFilePath = "test.dart";
 
     const command = `make test`;
-    const testResults = [];
+    const failedTests = [];
 
     for (const file of files) {
-      let res = {
-        fileName: file.fileName,
-        success: true,
-        wrongTest: null,
-        fatal: false,
-      };
-
       await writeFile(taskFilePath, file.taskFile, "utf-8");
       await writeFile(testFilePath, file.testFile, "utf-8");
 
@@ -26,31 +18,37 @@ export class RunnerService {
         await Utils.execAsync(command);
         console.log(`File ${file.fileName} passed tests successfully`);
       } catch ({ stdout }) {
-        const isFatal = stdout.includes("Failed to load");
-        res.success = false;
+        const failedTest = {
+          fileName: file.fileName,
+          input: "",
+          expected: "",
+          actual: "",
+          isFatal: false,
+        };
 
+        const isFatal = stdout.includes("Failed to load");
         if (isFatal) {
+          failedTest.isFatal = isFatal;
           console.log(`Failed to load ${file.fileName}`);
-          res.fatal = true;
-          continue;
+        } else {
+          const testInfo = Utils.parseTestInfo(stdout);
+          failedTest.input = testInfo[0];
+          failedTest.expected = testInfo[1];
+          failedTest.actual = testInfo[2];
+
+          console.log(
+            `File ${file.fileName} didn't pass test. Input: "${failedTest.input}" Expected: "${failedTest.expected}" Actual: "${failedTest.actual}"`
+          );
         }
 
-        const errorMessage = Utils.parseTestErrorMessage(stdout);
-        res.wrongTest = errorMessage;
-        console.log(
-          `File ${file.fileName} didn't pass test. Input: "${errorMessage[0]}" Expected: "${errorMessage[1]}" Actual: "${errorMessage[2]}"`
-        );
-      } finally {
-        testResults.push(res);
+        failedTests.push(failedTest);
       }
     }
 
     await unlink(taskFilePath);
     await unlink(testFilePath);
 
-    console.log(testResults);
-
-    return testResults;
+    return failedTests;
   }
 
   static async runFormatter(archive) {
@@ -63,8 +61,6 @@ export class RunnerService {
     const formatterResults = [];
 
     const { stdout } = await Utils.execAsync(command);
-
-    console.log(stdout);
 
     // for (const file of files) {
     //   let res = {
