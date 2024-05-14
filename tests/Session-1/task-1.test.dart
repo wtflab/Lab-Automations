@@ -33,7 +33,7 @@ void main() {
 
     test('Reversing a string with numbers @Input: "12345"', () async {
       final result = reverseString('54321');
-      expect(result, equals('54321'));
+      expect(result, equals('12345'));
     });
 
     test(

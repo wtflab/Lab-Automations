@@ -31,8 +31,7 @@ void main() {
     });
 
     test('Merge two empty lists @Input: "[], []"', () async {
-      final result = await mergeSortedLists(
-          mergeSortedLists, [<int>[], <int>[]], Duration(milliseconds: 500));
+      final result = await mergeSortedLists(<int>[], <int>[]);
       expect(result, []);
     });
 
