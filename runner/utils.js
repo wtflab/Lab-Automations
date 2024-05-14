@@ -2,26 +2,37 @@ import { exec } from "child_process";
 
 export class Utils {
   static parseTestInfo(stdout) {
-    const regex =
-      /Expected:\s'(.*?)'|Actual:\s'(.*?)'|Actual:\s.+<(.*?)>|@Input:\s"(.*?)".*?\[E/g;
+    const regex = /Expected:\s'(.*?)'|Actual:\s'(.*?)'|@Input:\s"(.*?)".*?\[E/g;
     const matches = [];
     let match;
 
     while ((match = regex.exec(stdout)) !== null) {
-      matches.push(match[1] || match[2] || match[3] || match[4] || "");
+      matches.push(match[1] || match[2] || match[3] || "");
     }
 
     return matches.slice(0, 3);
   }
 
-  static execAsync(command) {
+  static execAsync(command, timeout = 10000) {
     return new Promise((resolve, reject) => {
-      exec(command, (error, stdout, stderr) => {
+      const process = exec(command, (error, stdout, stderr) => {
         if (error) {
           reject({ stdout, stderr });
         } else {
           resolve({ stdout, stderr });
         }
+      });
+      const timer = setTimeout(() => {
+        process.kill();
+        reject({
+          stdout: `
+          @Input: "" [E]
+          Expected: ''
+          Actual: 'Timeout exception: Function execution time more 500 ms'`,
+        });
+      }, timeout);
+      process.on("exit", () => {
+        clearTimeout(timer);
       });
     });
   }
