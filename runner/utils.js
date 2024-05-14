@@ -28,7 +28,7 @@ export class Utils {
           stdout: `
           @Input: "" [E]
           Expected: ''
-          Actual: 'Timeout exception: Function execution time more 500 ms'`,
+          Actual: 'Timeout exception: Execution time more ${timeout} ms'`,
         });
       }, timeout);
       process.on("exit", () => {
