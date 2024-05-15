@@ -1,6 +1,7 @@
-import { writeFile, unlink, rm } from "node:fs/promises";
+import { writeFile, unlink, rm, readdir } from "node:fs/promises";
 import { Utils } from "./utils.js";
 import AdmZip from "adm-zip";
+import path from "node:path";
 
 export class RunnerService {
   static async runTests(files) {
@@ -32,9 +33,9 @@ export class RunnerService {
           console.log(`Failed to load ${file.fileName}`);
         } else {
           const testInfo = Utils.parseTestInfo(stdout);
-          failedTest.input = testInfo[0];
-          failedTest.expected = testInfo[1];
-          failedTest.actual = testInfo[2];
+          failedTest.input = testInfo[0] || "";
+          failedTest.expected = testInfo[1] || "";
+          failedTest.actual = testInfo[2] || "";
 
           console.log(
             `File ${file.fileName} didn't pass test. Input: "${failedTest.input}" Expected: "${failedTest.expected}" Actual: "${failedTest.actual}"`
@@ -52,59 +53,62 @@ export class RunnerService {
   }
 
   static async runFormatter(archive) {
-    console.log("start");
     const appPath = "app";
     const zip = new AdmZip(Buffer.from(archive));
     zip.extractAllTo(appPath, true);
 
     const command = `make format`;
-    const formatterResults = [];
+    const formatterFailedFiles = [];
 
     const { stdout } = await Utils.execAsync(command);
+    const filePaths = Utils.parseFormattedFilePaths(stdout);
 
-    // for (const file of files) {
-    //   let res = {
-    //     fileName: file.fileName,
-    //     success: true,
-    //   };
+    for (const filePath of filePaths) {
+      formatterFailedFiles.push({
+        path: filePath,
+        fileName: path.basename(filePath),
+      });
+    }
 
-    //   await writeFile(taskFilePath, file.taskFile, "utf-8");
-
-    //   const { stdout } = await Utils.execAsync(command);
-    //   const changedLines = Utils.parseChangedCount(stdout);
-    //   if (changedLines > 0) {
-    //     res.success = false;
-    //     console.log(`File ${file.fileName} failed formatter`);
-    //   } else {
-    //     console.log(`File ${file.fileName} passed formatter successfully`);
-    //   }
-
-    //   formatterResults.push(res);
-    // }
-
-    await rm(appPath, { recursive: true });
-
-    return formatterResults;
-  }
-
-  static async runLinter(archive) {
-    console.log("start");
-    const appPath = "app";
-    const zip = new AdmZip(Buffer.from(archive));
-    zip.extractAllTo(appPath, true);
-
-    const command = `make lint`;
-    const linterResults = [];
-
-    try {
-      const { stdout, stderr } = await Utils.execAsync(command);
-      console.log(stdout);
-    } catch (err) {
-      console.log(err);
+    if (!formatterFailedFiles.length) {
+      console.log("Formatter passed");
+    } else {
+      console.log("Formatter failed");
     }
 
     await rm(appPath, { recursive: true });
 
-    return linterResults;
+    return formatterFailedFiles;
+  }
+
+  static async runLinter(archive, sessionType) {
+    const appPath = "app";
+    const zip = new AdmZip(Buffer.from(archive));
+    zip.extractAllTo(appPath, true);
+
+    const linterOptions = await Utils.getLinterOptions(sessionType);
+    const appPathContent = await readdir(appPath);
+    const zipName = appPathContent[0];
+
+    await writeFile(
+      path.resolve(appPath, zipName, "analysis_options.yaml"),
+      linterOptions
+    );
+
+    const command = `make lint`;
+    let linterFailedFiles = [];
+
+    try {
+      await Utils.execAsync(command);
+      console.log("Linter passed");
+    } catch ({ stdout, stderr }) {
+      const failedFiles = Utils.parseLinterFailedFiles(stdout);
+      linterFailedFiles = failedFiles;
+      console.log("Linter failed");
+    }
+
+    await rm(appPath, { recursive: true });
+
+    return linterFailedFiles;
   }
 }

@@ -6,7 +6,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-app.use(json({ limit: "10mb" }));
+app.use(json({ limit: "20mb" }));
 
 app.post("/automation/tasks/test", async (req, res) => {
   const files = req.body?.files ?? "";
@@ -21,20 +21,21 @@ app.post("/automation/tasks/test", async (req, res) => {
 app.post("/automation/formatter", async (req, res) => {
   const archive = req.body.archive;
 
-  const formatterResults = await RunnerService.runFormatter(archive);
+  const formatterFailedFiles = await RunnerService.runFormatter(archive);
   res.status(200).json({
     message: "OK",
-    result: formatterResults,
+    result: formatterFailedFiles,
   });
 });
 
 app.post("/automation/linter", async (req, res) => {
   const archive = req.body?.archive;
+  const sessionType = req.body?.sessionType;
 
-  const linterResults = await RunnerService.runLinter(archive);
+  const linterFailedFiles = await RunnerService.runLinter(archive, sessionType);
   res.status(200).json({
     message: "OK",
-    result: linterResults,
+    result: linterFailedFiles,
   });
 });
 
