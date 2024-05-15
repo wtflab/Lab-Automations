@@ -46,7 +46,7 @@ export class Utils {
     for (const line of lines) {
       const matches = line.match(/Formatted\sapp\/([\w\/.-]+)/);
       if (matches && matches.length > 1) {
-        const filePath = matches[1].replace(/^.*\//, "");
+        const filePath = matches[1].substring(matches[1].indexOf("/") + 1);
         filePaths.push(filePath);
       }
     }
@@ -73,7 +73,7 @@ export class Utils {
     for (const str of strings) {
       const match = str.match(regex);
       if (match) {
-        const path = match[1].trim().replace(/^.*\//, "");
+        const path = match[1].substring(match[1].indexOf("/") + 1);
         const [line, position] = match[2]
           .trim()
           .split(":")
