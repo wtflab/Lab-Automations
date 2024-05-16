@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   runner:
-    container_name: runner
-    image: rgs.flutter.wtf.lab/runner
+    container_name: lab-runner
+    image: rgs.flutter.wtf/lab-runner:latest
     restart: unless-stopped
     labels:
       - 'com.centurylinklabs.watchtower.enable=true'
@@ -12,12 +12,3 @@ services:
       dockerfile: ./Dockerfile
     environment:
       - PORT=$PORT
-    networks:
-      - local
-      - root_nginx
-
-networks:
-  local:
-    driver: bridge
-  root_nginx:
-    external: true
