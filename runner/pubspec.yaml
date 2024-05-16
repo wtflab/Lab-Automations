@@ -8,3 +8,4 @@ dependencies:
   http: ^1.1.2
 dev_dependencies:
   test: ^1.25.4
+  flutter_lints: ^1.0.0

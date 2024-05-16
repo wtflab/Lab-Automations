@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  runner:
+    container_name: lab-runner
+    image: rgs.flutter.wtf/lab-runner:latest
+    restart: unless-stopped
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    environment:
+      - PORT=$PORT

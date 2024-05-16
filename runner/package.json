@@ -1,0 +1,33 @@
+{
+  "name": "lab-automations",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node main.js",
+    "start:dev": "nodemon main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wtflab/Lab-Automations.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wtflab/Lab-Automations/issues"
+  },
+  "homepage": "https://github.com/wtflab/Lab-Automations#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.12",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
