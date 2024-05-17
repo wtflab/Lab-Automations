@@ -3,7 +3,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 
 export class Utils {
-  static execAsync(command, timeout = 10000) {
+  static execAsync(command, timeout = 20000) {
     return new Promise((resolve, reject) => {
       const process = exec(command, (error, stdout, stderr) => {
         if (error) {
