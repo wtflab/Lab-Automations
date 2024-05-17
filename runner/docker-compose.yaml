@@ -11,4 +11,6 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     environment:
-      - PORT=$PORT
+      - PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"
