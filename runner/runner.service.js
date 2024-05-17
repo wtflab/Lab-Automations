@@ -8,7 +8,7 @@ export class RunnerService {
     const taskFilePath = "task.dart";
     const testFilePath = "test.dart";
 
-    const command = `make test`;
+    const command = "make test";
     const failedTests = [];
 
     for (const file of files) {
